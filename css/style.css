@@ -9,13 +9,8 @@
 
 }
 
-.item {
+.panel {
  display: inline-block;
  padding:  .25rem;
  width:  100%;
-}
-
-.well {
- position:relative;
- display: block;
 }

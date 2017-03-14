@@ -6,66 +6,61 @@
   <link rel="stylesheet" href="css/style.css" media="screen" charset="utf-8">
   <link href="../cv/css/bootstrap.min.css" rel="stylesheet">
   <script src="../js/lib/jquery.js"></script>
+  <script src="../js/lib/jquery-ui.js"></script>
   <script src="../cv/js/bootstrap.min.js"></script>
 </head>
 <body>
   <div class="container">
-      <h2>Igoogle</h2>
-      <div class="row">
-          <div class="item">
-            <div class="well" id="time">
-
-            </div>
-          </div>
-       	<div class="item">
-              <div class="well">
-              2 blah blah blah blah blah blah blah blah blah blah blah blahblah blah blah blah blah blah
-              </div>
-          </div>
-          <div class="item">
-              <div class="well">
-              3 blah blah blah blah blah blah blah blah h
-              </div>
-          </div>
-          <div class="item">
-              <div class="well">
-              blah blah blah blah
-              </div>
-          </div>
-          <div class="item">
-              <div class="well">
-                blah blah blah. The container inside the item must be position:relative
-              </div>
-          </div>
-       	<div class="item">
-              <div class="well">
-              blah blah blah blah blah blah blah blah blah blah blah blahblah blah blah blah blah blah
-              </div>
-          </div>
-          <div class="item">
-              <div class="well">
-              blah blah blah blah blah blah blah blah h
-              </div>
-          </div>
-          <div class="item">
-              <div class="well">
-              blah blah blah blah
-              </div>
-          </div>
-          <div class="item">
-              <div class="well">
-              blah blah blah blah blah blah blah blah blah blah blah blah
-              </div>
-          </div>
-          <div class="item">
-              <div class="well">
-                blah blah blah. The container inside the item must be position:relative
-              </div>
-          </div>
+    <h2>Igoogle</h2>
+    <div class="row">
+      <div class="panel panel-primary" id="time">
+        <div class="panel-heading">Date et Heure</div>
+        <div class="panel-body"></div>
       </div>
+      <div class="panel panel-primary" id="nasa">
+        <div class="panel-heading"></div>
+        <div class="panel-body"></div>
+      </div>
+      <div class="panel panel-primary" id="weather">
+        <div class="panel-heading"></div>
+        <div class="panel-body"></div>
+      </div>
+
+      <div class="panel panel-primary">
+        <div class="panel-heading">YouTube</div>
+        <div class="panel-body">
+          <embed id="ytplayer" type="text/html" width="240" height="200" frameborder="0" />
+        </div>
+      </div>
+
+    </div>
   </div>
   <script>
-    $("#time").text($.now())
+  var weatherValues;
+  var nasaValues;
+
+  $(".panel").draggable();
+
+  // Maj du temps à chaque seconde
+  setInterval(function() {
+    $("#time .panel-body").text(new Date($.now()));
+  }, 1000);
+
+  $.getJSON("nasa.php").then(function(result) {
+    nasaValues = result;
+    $("#nasa .panel-body").append("<img class='img-thumbnail' src='"+result.url +"'/>");
+    $("#nasa .panel-heading").append(result.title);
+    $("#nasa .panel-body").append(result.explanation);
+  });
+
+  $.getJSON("weather.php?city=Bordeaux").then(function(result) {
+    weatherValues = result;
+    $("#weather .panel-heading").append(result.data.request[0].query);
+    $("#weather .panel-body").append("<img class='img-circle' src='"+result.data.current_condition[0].weatherIconUrl[0].value+"'/>");
+    $("#weather .panel-body").append(result.data.current_condition[0].temp_C);
+  });
+
+  document.getElementById("ytplayer").src ="http://www.youtube.com/embed?listType=search&list=chat";
   </script>
 </body>
 </html>
