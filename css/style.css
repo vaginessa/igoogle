@@ -1,16 +1,26 @@
-*, *:before, *:after {box-sizing:  border-box !important;}
-
+*, *:before, *:after {box-sizing:  border-box !important}
 
 .row {
  -moz-column-width: 18em;
  -webkit-column-width: 18em;
  -moz-column-gap: 1em;
  -webkit-column-gap:1em;
-
 }
 
 .panel {
  display: inline-block;
- padding:  .25rem;
- width:  100%;
+ width: 100%;
+ overflow: hidden;
+ max-height: 400px;
+ text-align: center;
+}
+
+#youtube .panel-body {
+  padding: 0px;
+}
+
+#temp {
+  display: inline;
+  font-size: 2em;
+  margin: 0.5em;
 }
