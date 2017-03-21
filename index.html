@@ -20,7 +20,8 @@
           <span class="glyphicon glyphicon-search"></span>
         </button>
       </div>
-      <button type="button" class="btn btn-primary active" onclick="createWidget()">Ajout Horloge</button>
+      <button type="button" class="btn btn-primary active" onclick="createWidget('time')">Ajout Horloge</button>
+      <button type="button" class="btn btn-primary active" onclick="createWidget('nasa')">Ajout MOTD Nasa</button>
     </div>
     <div class="well">
       <div class="row">
@@ -28,11 +29,11 @@
           <div class="panel-heading"></div>
           <div class="panel-body"></div>
         </div>
-        <div class="panel panel-primary" id="nasa" data-toggle="modal" data-target="#nasa-modal">
+        <!--<div class="panel panel-primary" id="nasa" data-toggle="modal" data-target="#nasa-modal">
           <div class="panel-heading"></div>
           <div class="panel-body"></div>
-          <!--has modal-->
-        </div>
+
+        </div>-->
         <div class="panel panel-primary" id="twitter">
           <div class="panel-body">
             <a class="twitter-timeline" data-height="400" href="https://twitter.com/iutInfoBdx">Tweets by iutInfoBdx</a>
@@ -83,16 +84,6 @@
     connectToSortable: ".row"
   });
 
-  $.getJSON("nasa.php").then(function(result) {
-    nasaValues = result;
-    $("#nasa .panel-body").append("<img class='img-thumbnail' src='"+result.url +"'/>");
-    $("#nasa .panel-heading").append(result.title);
-    $("#nasa .panel-body").append("<p></p>"+result.explanation.trimToLength(60));
-    $("#nasa-modal").find(".modal-title").text(result.title);
-    $("#nasa-modal").find(".modal-body").append("<img class='img-thumbnail' src='"+result.url +"'/>");
-    $("#nasa-modal").find(".modal-body").append("<p></p><p>"+result.explanation+"</p>");
-  });
-
   $.getJSON("weather.php?city=Bordeaux").then(function(result) {
     weatherValues = result;
     $("#weather .panel-heading").append(result.data.request[0].query);
@@ -109,17 +100,36 @@
   </script>
   <!-- what's a widget ?-->
   <script>
-  function createWidget() {
-    var widget = $("<div class='panel panel-primary' id='time'></div>");
-
-    widget.append("<div class='panel-body'></div>");
-    widget.find(".panel-body").thooClock({
-      size:150,
-      secondHandColor:'#337ab7',
-      showNumerals:false
+  function updateNasa(widget) {
+    $.getJSON("nasa.php").then(function(result) {
+      nasaValues = result;
+      widget.find(".panel-body").append("<img class='img-thumbnail' src='"+result.url +"'/>");
+      widget.find(".panel-heading").append(result.title);
+      widget.find(".panel-body").append("<p></p>"+result.explanation.trimToLength(60));
+      $("#nasa-modal").find(".modal-title").text(result.title);
+      $("#nasa-modal").find(".modal-body").append("<img class='img-thumbnail' src='"+result.url +"'/>");
+      $("#nasa-modal").find(".modal-body").append("<p></p><p>"+result.explanation+"</p>");
     });
-    $(".row").append(widget);
+  }
 
+  function createWidget(widgetName) {
+    var widget = $("<div class='panel panel-primary'></div>");
+    widget.append("<div class='panel-body'></div>");
+    switch (widgetName) {
+      case "time":
+      widget.find(".panel-body").thooClock({
+        size:150,
+        secondHandColor:'#337ab7',
+        showNumerals:false
+      });
+      break;
+      case "nasa":
+      updateNasa(widget);
+      break;
+      default:
+      break;
+    }
+    $(".row").append(widget);
   }
   </script>
 </body>
